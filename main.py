@@ -278,6 +278,9 @@ class PanoramaViewer(metaclass=ABCMeta):
                 return x1,y1,x2,y2
         return -1,-1,-1,-1
 
+#動画追いついちゃう問題の対策
+cap = cv2.VideoCapture('/var/www/html/hls/test.m3u8')
+
 class VideoViewer():
     def __init__(self, video_path,projector,model, width=1200, height=600,pict_width = 800,pict_height =600):
         self._cap = cv2.VideoCapture(video_path)
@@ -330,7 +333,7 @@ class VideoViewer():
                     continue
                 #ボールの中心と画像の中心のユークリッド距離
                 nowcost = math.sqrt((self._pict_width/2-(a+c)/2)*(self._pict_width/2-(a+c)/2)+(self._pict_height/2-(b+d)/2)*(self._pict_height/2-(b+d)/2))
-                print(6 * i,6 * (j-2),nowcost)
+                # print(6 * i,6 * (j-2),nowcost)
                 if nowcost < cost:
                     xmi = a
                     ymi = b
@@ -405,7 +408,7 @@ class VideoViewer():
 
             while True:
                 tstart = time.time()
-                ret, img = self._cap.read()
+                ret, img = cap.read()
                 self.image_queue.append(img)
                 self.frequent_cnt+= 1
                 self.debugimage_id.append(self.frequent_cnt)
@@ -429,7 +432,7 @@ class VideoViewer():
                         nowmag = self.weighted_mag() 
 
                         #描画する
-                        print(nowiamge_id,self.debug_id[0],self.debug_id[1])
+                        # print(nowiamge_id,self.debug_id[0],self.debug_id[1])
                         viewer = PanoramaViewer(nowimage, self._projector,self._model,nowloncnt,nowlatcnt)
                         viewer._d *= nowmag
                         viewer()
@@ -450,7 +453,7 @@ class VideoViewer():
             if is_continue == False:
                 break
 
-        self._cap.release()
+        cap.release()
         cv2.destroyAllWindows()
 
 
