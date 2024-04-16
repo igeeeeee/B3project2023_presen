@@ -8,8 +8,10 @@ import math
 from collections import deque
 import time
 
+
 import numpy as np
 import cv2
+
  
  
 class PanoramaProjector(metaclass=ABCMeta):
@@ -258,10 +260,7 @@ class PanoramaViewer(metaclass=ABCMeta):
         image = self._projector(img, self._lon, self._lat, self._d, self._width, self._height,
                         mapping_style=self._mapping_style, fov_mode=False)
 
-        if flag : 
-            result = self._model(image,imgsz=320,verbose=False)
-        else:
-            result = self._model(image,imgsz=640,verbose=False)
+        result = self._model(image,imgsz=640,verbose=False)
 
         # result[0]からResultsオブジェクトを取り出す
         result_object = result[0]
@@ -432,8 +431,8 @@ class VideoViewer():
                         nowmag = self.weighted_mag() 
 
                         #描画する
-                        # print(nowiamge_id,self.debug_id[0],self.debug_id[1])
-                        viewer = PanoramaViewer(nowimage, self._projector,self._model,nowloncnt,nowlatcnt)
+                        #出力を大きくする
+                        viewer = PanoramaViewer(nowimage, self._projector,self._model,nowloncnt,nowlatcnt,1,1200,900)
                         viewer._d *= nowmag
                         viewer()
 
